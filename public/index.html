@@ -16,18 +16,18 @@
 <body>
   <h3>Voiceful Order Notifications</h3>
   <div>
-    <label>User ID:</label>
-    <input id="userId" type="text" placeholder="Enter user/clientId" />
+    <label>Client ID:</label>
+    <input id="clientId" type="text" placeholder="Enter client/clientId" />
     <button id="register">Connect</button>
   </div>
   <pre id="logs"></pre>
   <div id="advancedTools" style="display: none;">
     <hr />
     <h3>Advanced Tools</h3>
-    <!-- Updated Broadcast UI section to notify a specific user -->
+    <!-- Updated Broadcast UI section to notify a specific client -->
     <div id="broadcastSection">
-      <label>User ID:</label>
-      <input id="targetUserId" type="text" placeholder="Enter target userId" />
+      <label>Client ID:</label>
+      <input id="targetClientId" type="text" placeholder="Enter target clientId" />
       <label>Message:</label>
       <input id="msg" type="text" placeholder="Optional" />
       <button id="send">Notify</button>
@@ -67,18 +67,18 @@
       }
     }
 
-    // Parse the 'root' and 'userId' query parameters from the page URL
+    // Parse the 'root' and 'clientId' query parameters from the page URL
     const urlParams = new URLSearchParams(window.location.search);
     const root = urlParams.get('root') === 'true';
-    const queryUserId = urlParams.get('userId');
+    const queryClientId = urlParams.get('clientId');
     document.getElementById('advancedTools').style.display = root ? 'block' : 'none';
-    document.getElementById('userId').value = queryUserId || '';
+    document.getElementById('clientId').value = queryClientId || '';
 
     document.getElementById('register').addEventListener('click', () => {
       if (!isConnected) {
-        const userId = document.getElementById('userId').value.trim();
-        if (!userId) {
-          log('Please enter a valid User ID.');
+        const clientId = document.getElementById('clientId').value.trim();
+        if (!clientId) {
+          log('Please enter a valid Client ID.');
           return;
         }
 
@@ -87,11 +87,11 @@
         ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
-          ws.send(JSON.stringify({ type: 'registration', userId }));
-          log('Listening for new orders at ' + userId);
+          ws.send(JSON.stringify({ type: 'registration', clientId }));
+          log('Listening for new orders at ' + clientId);
           // Update UI to reflect connected state
           document.getElementById('register').textContent = 'Disconnect';
-          document.getElementById('userId').disabled = true;
+          document.getElementById('clientId').disabled = true;
           isConnected = true;
         };
 
@@ -102,11 +102,11 @@
         };
 
         ws.onclose = () => {
-          const userId = document.getElementById('userId').value.trim();
-          log('Connection closed for ' + userId);
+          const clientId = document.getElementById('clientId').value.trim();
+          log('Connection closed for ' + clientId);
           // Revert UI to reflect disconnected state
           document.getElementById('register').textContent = 'Connect';
-          document.getElementById('userId').disabled = false;
+          document.getElementById('clientId').disabled = false;
           isConnected = false;
         };
       } else {
@@ -119,11 +119,11 @@
     });
 
     document.getElementById('send').addEventListener('click', () => {
-      const targetUserId = document.getElementById('targetUserId').value.trim();
+      const targetClientId = document.getElementById('targetClientId').value.trim();
       let text = document.getElementById('msg').value.trim();
       
-      if (!targetUserId) {
-        log('Please enter a valid User ID.');
+      if (!targetClientId) {
+        log('Please enter a valid Client ID.');
         return;
       }
 
@@ -132,7 +132,7 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ userId: targetUserId, message: text })
+        body: JSON.stringify({ clientId: targetClientId, message: text })
       })
       .then(response => response.json())
       .then(data => {

@@ -7,7 +7,7 @@ app.use(express.json());
 // Serve static client files
 app.use(express.static('public'));
 
-// In-memory store of client sockets keyed by user/clientId
+// In-memory store of client sockets keyed by clientId
 const clientMap = {};
 
 // Create an HTTP server and attach WebSocket server
@@ -19,23 +19,23 @@ const server = app.listen(PORT, () => {
 const wss = new WebSocketServer({ server });
 
 wss.on('connection', (ws, req) => {
-  let userId = null;
+  let clientId = null;
 
   // On message, expect either registration or broadcast
   ws.on('message', (data) => {
     try {
       const msg = JSON.parse(data);
-      if (msg.type === 'registration' && msg.userId) {
+      if (msg.type === 'registration' && msg.clientId) {
         // register client
-        userId = msg.userId;
-        clientMap[userId] = ws;
-        console.log(`User ${userId} registered`);
+        clientId = msg.clientId;
+        clientMap[clientId] = ws;
+        console.log(`Client ${clientId} registered`);
       } else if (msg.type === 'broadcast') {
         // Send to all connected clients
         wss.clients.forEach((client) => {
           if (client.readyState === 1) {
             client.send(JSON.stringify({
-              from: userId,
+              from: clientId,
               text: msg.text
             }));
           }
@@ -48,18 +48,18 @@ wss.on('connection', (ws, req) => {
 
   // If a client disconnects
   ws.on('close', () => {
-    if (userId && clientMap[userId]) {
-      delete clientMap[userId];
-      console.log(`User ${userId} disconnected`);
+    if (clientId && clientMap[clientId]) {
+      delete clientMap[clientId];
+      console.log(`Client ${clientId} disconnected`);
     }
   });
 });
 
 // A simple REST endpoint to notify a client
 app.post('/notify', (req, res) => {
-  // Expects JSON with { userId, message }
-  const { userId, message } = req.body;
-  const ws = clientMap[userId];
+  // Expects JSON with { clientId, message }
+  const { clientId, message } = req.body;
+  const ws = clientMap[clientId];
   const defaultMessage = `New order received at: ${new Date().toLocaleString('en-US', { 
     month: '2-digit', 
     day: '2-digit', 
@@ -78,5 +78,5 @@ app.post('/notify', (req, res) => {
     }));
     return res.json({ success: true });
   }
-  return res.status(404).json({ error: 'User not found or not connected' });
+  return res.status(404).json({ error: 'Client not found or not connected' });
 });
