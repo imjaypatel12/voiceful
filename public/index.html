@@ -15,22 +15,36 @@
 </head>
 <body>
   <h3>Voiceful Order Notifications</h3>
-  <div>
-    <label>Client ID:</label>
-    <input id="clientId" type="text" placeholder="Enter client/clientId" />
-    <button id="register">Connect</button>
-  </div>
-  <pre id="logs"></pre>
-  <div id="advancedTools" style="display: none;">
-    <hr />
-    <h3>Advanced Tools</h3>
-    <!-- Updated Broadcast UI section to notify a specific client -->
-    <div id="broadcastSection">
-      <label>Client ID:</label>
-      <input id="targetClientId" type="text" placeholder="Enter target clientId" />
-      <label>Message:</label>
-      <input id="msg" type="text" placeholder="Optional" />
-      <button id="send">Notify</button>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <label>Client ID:</label>
+        <input id="clientId" type="text" placeholder="Enter client/clientId" />
+        <button id="register" class="btn waves-effect waves-light">Connect</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <pre id="logs"></pre>
+      </div>
+    </div>
+    <div id="advancedTools" style="display: none;">
+      <hr />
+      <h3>Advanced Tools</h3>
+      <!-- Updated Broadcast UI section to notify a specific client -->
+      <div id="broadcastSection" class="row">
+        <div class="col s12">
+          <label>Client ID:</label>
+          <input id="targetClientId" type="text" placeholder="Enter target clientId" />
+        </div>
+        <div class="col s12">
+          <label>Message:</label>
+          <input id="msg" type="text" placeholder="Optional" />
+        </div>
+        <div class="col s12">
+          <button id="send" class="btn waves-effect waves-light">Notify</button>
+        </div>
+      </div>
     </div>
   </div>
 
