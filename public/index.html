@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Voiceful Order Notifications</title>
+</head>
+<body>
+  <h1>Voiceful Order Notifications</h1>
+  <div>
+    <label>User ID:</label>
+    <input id="userId" type="text" placeholder="Enter user/clientId" />
+    <button id="register">Connect</button>
+  </div>
+  <!-- Broadcast UI section -->
+  <div id="broadcastSection" style="display: none;">
+    <label>Message:</label>
+    <input id="msg" type="text" placeholder="Broadcast message here" />
+    <button id="send">Broadcast</button>
+  </div>
+  <pre id="logs"></pre>
+
+  <script>
+    let ws;
+    let isConnected = false;
+
+    function log(message) {
+      const logs = document.getElementById('logs');
+      logs.textContent = message + '\n';
+    }
+
+    function beep() {
+      var context = new AudioContext();
+      var oscillator = context.createOscillator();
+      oscillator.type = "sine";
+      oscillator.frequency.value = 800;
+      oscillator.connect(context.destination);
+      oscillator.start();
+      // Beep for 100 milliseconds
+      setTimeout(function () {
+          oscillator.stop();
+      }, 100);
+    }
+
+    // Parse the 'broadcast' query parameter from the page URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const broadcast = urlParams.get('broadcast') === 'true';
+    const userId = urlParams.get('userId');
+    document.getElementById('broadcastSection').style.display = broadcast ? 'block' : 'none';
+    document.getElementById('userId').value = userId || '';
+
+    document.getElementById('register').addEventListener('click', () => {
+      if (!isConnected) {
+        const userId = document.getElementById('userId').value.trim();
+        if (!userId) {
+          log('Please enter a valid User ID.');
+          return;
+        }
+        const wsUrl = `ws://${window.location.host}`;
+        ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+          ws.send(JSON.stringify({ type: 'registration', userId }));
+          log('Listening for new orders at ' + userId);
+          // Update UI to reflect connected state
+          document.getElementById('register').textContent = 'Disconnect';
+          document.getElementById('userId').disabled = true;
+          isConnected = true;
+        };
+
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data);                     // disabled to avoid data pileups
+          log(data.text);
+          beep();
+        };
+
+        ws.onclose = () => {
+          const userId = document.getElementById('userId').value.trim();
+          log('Connection closed for ' + userId);
+          // Revert UI to reflect disconnected state
+          document.getElementById('register').textContent = 'Connect';
+          document.getElementById('userId').disabled = false;
+          isConnected = false;
+        };
+      } else {
+        // Disconnect logic
+        if (ws) {
+          ws.close();
+          log('Disconnecting...');
+        }
+      }
+    });
+
+    document.getElementById('send').addEventListener('click', () => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        const text = document.getElementById('msg').value.trim();
+        ws.send(JSON.stringify({ type: 'broadcast', text }));
+      }
+    });
+  </script>
+</body>
+</html>

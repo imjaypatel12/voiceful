@@ -1,0 +1,14 @@
+
+{
+  "name": "ljh2-websocket-app",
+  "version": "1.0.0",
+  "description": "Demo WebSockets app with user-specific notifications",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.11.0"
+  }
+}
