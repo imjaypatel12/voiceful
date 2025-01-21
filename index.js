@@ -11,8 +11,9 @@ app.use(express.static('public'));
 const clientMap = {};
 
 // Create an HTTP server and attach WebSocket server
-const server = app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
 
 const wss = new WebSocketServer({ server });
