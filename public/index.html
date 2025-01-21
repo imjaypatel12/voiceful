@@ -3,25 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <title>Voiceful Order Notifications</title>
+  
+  <!-- Import Materialize CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  
+  <!-- Import Google Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <!-- Custom Styles -->
+  <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-  <h1>Voiceful Order Notifications</h1>
+  <h3>Voiceful Order Notifications</h3>
   <div>
     <label>User ID:</label>
     <input id="userId" type="text" placeholder="Enter user/clientId" />
     <button id="register">Connect</button>
   </div>
-  <!-- Broadcast UI section -->
-  <div id="broadcastSection" style="display: none;">
-    <label>Message:</label>
-    <input id="msg" type="text" placeholder="Broadcast message here" />
-    <button id="send">Broadcast</button>
-  </div>
   <pre id="logs"></pre>
+  <div id="advancedTools" style="display: none;">
+    <hr />
+    <h3>Advanced Tools</h3>
+    <!-- Updated Broadcast UI section to notify a specific user -->
+    <div id="broadcastSection">
+      <label>User ID:</label>
+      <input id="targetUserId" type="text" placeholder="Enter target userId" />
+      <label>Message:</label>
+      <input id="msg" type="text" placeholder="Optional" />
+      <button id="send">Notify</button>
+    </div>
+  </div>
 
   <script>
     let ws;
     let isConnected = false;
+    let audioContext = new AudioContext();
 
     function log(message) {
       const logs = document.getElementById('logs');
@@ -29,24 +45,34 @@
     }
 
     function beep() {
-      var context = new AudioContext();
-      var oscillator = context.createOscillator();
-      oscillator.type = "sine";
-      oscillator.frequency.value = 800;
-      oscillator.connect(context.destination);
-      oscillator.start();
-      // Beep for 100 milliseconds
-      setTimeout(function () {
-          oscillator.stop();
-      }, 100);
+      if (audioContext) {
+        // Resume AudioContext if it's suspended
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+
+        const oscillator = audioContext.createOscillator();
+        oscillator.type = "sine";
+        oscillator.frequency.value = 800;
+        oscillator.connect(audioContext.destination);
+        oscillator.start();
+        // Beep for 300 milliseconds
+        setTimeout(function () {
+            oscillator.stop();
+        }, 300);
+
+
+      } else {
+        console.warn('AudioContext not initialized.');
+      }
     }
 
-    // Parse the 'broadcast' query parameter from the page URL
+    // Parse the 'root' and 'userId' query parameters from the page URL
     const urlParams = new URLSearchParams(window.location.search);
-    const broadcast = urlParams.get('broadcast') === 'true';
-    const userId = urlParams.get('userId');
-    document.getElementById('broadcastSection').style.display = broadcast ? 'block' : 'none';
-    document.getElementById('userId').value = userId || '';
+    const root = urlParams.get('root') === 'true';
+    const queryUserId = urlParams.get('userId');
+    document.getElementById('advancedTools').style.display = root ? 'block' : 'none';
+    document.getElementById('userId').value = queryUserId || '';
 
     document.getElementById('register').addEventListener('click', () => {
       if (!isConnected) {
@@ -55,7 +81,9 @@
           log('Please enter a valid User ID.');
           return;
         }
-        const wsUrl = `ws://${window.location.host}`;
+
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const wsUrl = `${protocol}${window.location.host}`;
         ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
@@ -91,10 +119,31 @@
     });
 
     document.getElementById('send').addEventListener('click', () => {
-      if (ws && ws.readyState === WebSocket.OPEN) {
-        const text = document.getElementById('msg').value.trim();
-        ws.send(JSON.stringify({ type: 'broadcast', text }));
+      const targetUserId = document.getElementById('targetUserId').value.trim();
+      let text = document.getElementById('msg').value.trim();
+      
+      if (!targetUserId) {
+        log('Please enter a valid User ID.');
+        return;
       }
+
+      fetch('/notify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId: targetUserId, message: text })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.success) {
+          log(`Error: ${data.error}`);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        log('Failed to send notification.');
+      });
     });
   </script>
 </body>
