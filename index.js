@@ -1,8 +1,10 @@
 const express = require('express');
 const { WebSocketServer } = require('ws');
 const escpos = require('escpos'); // Imported escpos library
-const Bluetooth = require('node-bluetooth'); // Added node-bluetooth for Bluetooth printer detection
+escpos.USB = require('escpos-usb'); // Added escpos-usb for USB printer support
+// const escposBluetooth = require('escpos-bluetooth'); // Removed escpos-bluetooth for Bluetooth printer support
 const ping = require('net-ping'); // Added net-ping for Ethernet printer scanning
+const { exec } = require('child_process'); // Added child_process for executing system commands
 const app = express();
 
 app.use(express.json());
@@ -84,7 +86,7 @@ app.post('/notify', (req, res) => {
   return res.status(404).json({ error: 'Client not found or not connected' });
 });
 
-// New: API endpoint to list connected printers with editable subnet
+// New: API endpoint to list connected printers
 app.get('/printers', async (req, res) => {
   try {
     const printers = [];
@@ -98,7 +100,7 @@ app.get('/printers', async (req, res) => {
     }
 
     // --- USB Printers ---
-    const usbDevices = escpos.USB.findPrinter();
+    const usbDevices = escpos.USB.findPrinter(); 
     usbDevices.forEach((device, index) => {
       printers.push({
         id: `usb-${index + 1}`,
@@ -118,17 +120,6 @@ app.get('/printers', async (req, res) => {
         deviceName: printer.address,
         ipAddress: printer.address,
         port: printer.port
-      });
-    });
-
-    // --- Bluetooth Printers ---
-    const bluetoothPrinters = await findBluetoothPrinters();
-    bluetoothPrinters.forEach((printer, index) => {
-      printers.push({
-        id: `bluetooth-${index + 1}`,
-        type: 'Bluetooth',
-        deviceName: printer.name,
-        address: printer.address
       });
     });
 
@@ -154,10 +145,6 @@ app.post('/print', async (req, res) => {
       device = new escpos.USB(printer.vendorId, printer.productId);
     } else if (printer.type === 'Ethernet') {
       device = new escpos.Network(printer.ipAddress, printer.port);
-    } else if (printer.type === 'Bluetooth') {
-      // Note: escpos may have limited support for Bluetooth. Additional libraries might be required.
-      // For demonstration, assuming Bluetooth printers can be handled similarly to Network printers
-      device = new escpos.Network(printer.address, 9100); // Adjust port as necessary
     } else {
       return res.status(400).json({ success: false, error: 'Unsupported printer type.' });
     }
@@ -237,22 +224,4 @@ function findEthernetPrinters(subnet) {
 function isValidSubnet(subnet) {
   const subnetPattern = /^(\d{1,3}\.){3}$/;
   return subnetPattern.test(subnet);
-}
-
-// Function to find Bluetooth Printers
-function findBluetoothPrinters() {
-  return new Promise((resolve, reject) => {
-    const device = new Bluetooth.DeviceINQ();
-
-    const printers = [];
-
-    device.on('finished', () => {
-      resolve(printers);
-    }).on('found', (address, name) => {
-      // Assuming printers have specific service classes, adjust as needed
-      // For example, ESC/POS printers might have specific UUIDs
-      // Here we add all found Bluetooth devices as potential printers
-      printers.push({ name, address });
-    }).scan();
-  });
 }

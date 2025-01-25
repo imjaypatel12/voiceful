@@ -7,8 +7,10 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-usb": "^3.0.0-alpha.4",
     "express": "^4.18.2",
-    "ws": "^8.11.0",
-    "escpos": "^3.0.0" // Added escpos for printing functionality
+    "net-ping": "^1.2.4",
+    "ws": "^8.11.0"
   }
 }
