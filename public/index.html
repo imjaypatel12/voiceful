@@ -46,6 +46,26 @@
         </div>
       </div>
     </div>
+    
+    <!-- New Printers Section -->
+    <div class="row">
+      <div class="col s12">
+        <h5>Connected Printers</h5>
+        <button id="refreshPrinters" class="btn waves-effect waves-light">Refresh Printers</button>
+        <ul id="connectedPrinters" class="collection"></ul>
+        
+        <!-- New Print Button -->
+        <button id="printHello" class="btn waves-effect waves-light" style="margin-top: 15px;">Print Hello World</button>
+      </div>
+    </div>
+
+    <!-- New Subnet Input Field -->
+    <div class="row">
+      <div class="col s12">
+        <label for="subnet">Subnet:</label>
+        <input id="subnet" type="text" placeholder="Enter subnet (e.g., 192.168.1.)" value="192.168.1." />
+      </div>
+    </div>
   </div>
 
   <script>
@@ -159,6 +179,128 @@
         log('Failed to send notification.');
       });
     });
+
+    // New: Load Printers
+    document.getElementById('refreshPrinters').addEventListener('click', loadPrinters);
+
+    function loadPrinters() {
+      const subnet = document.getElementById('subnet').value.trim();
+      if (!isValidSubnet(subnet)) {
+        log('Please enter a valid subnet (e.g., 192.168.1.).');
+        return;
+      }
+
+      fetch(`/printers?subnet=${encodeURIComponent(subnet)}`)
+        .then(response => response.json())
+        .then(data => {
+          const printerList = data.printers;
+          const connectedPrinters = document.getElementById('connectedPrinters');
+          connectedPrinters.innerHTML = ''; // Clear existing list
+
+          if (printerList.length === 0) {
+            connectedPrinters.innerHTML = '<li class="collection-item">No printers found.</li>';
+            return;
+          }
+
+          // Group printers by type
+          const groupedPrinters = printerList.reduce((groups, printer) => {
+            const type = printer.type;
+            if (!groups[type]) {
+              groups[type] = [];
+            }
+            groups[type].push(printer);
+            return groups;
+          }, {});
+
+          // Iterate over each group and append to the list with separators
+          Object.keys(groupedPrinters).forEach(type => {
+            // Add a header for the printer type
+            const headerItem = document.createElement('li');
+            headerItem.className = 'collection-header';
+            headerItem.innerHTML = `<h6>${type} Printers</h6>`;
+            connectedPrinters.appendChild(headerItem);
+
+            // Add printers of this type with radio buttons for selection
+            groupedPrinters[type].forEach(printer => {
+              const listItem = document.createElement('li');
+              listItem.className = 'collection-item';
+
+              // Create radio button
+              const radioInput = document.createElement('input');
+              radioInput.type = 'radio';
+              radioInput.name = 'selectedPrinter';
+              radioInput.id = printer.id;
+              radioInput.value = JSON.stringify(printer); // Serialize printer object
+
+              // Create label for radio button
+              const label = document.createElement('label');
+              label.htmlFor = printer.id;
+              let printerInfo = `${printer.deviceName}`;
+              
+              // Append additional info based on printer type
+              if (type === 'USB') {
+                printerInfo += ` (Vendor ID: ${printer.vendorId}, Product ID: ${printer.productId})`;
+              } else if (type === 'Ethernet') {
+                printerInfo += ` (IP: ${printer.ipAddress}, Port: ${printer.port})`;
+              } else if (type === 'Bluetooth') {
+                printerInfo += ` (Address: ${printer.address})`;
+              }
+
+              label.textContent = printerInfo;
+              
+              // Append radio button and label to list item
+              listItem.appendChild(radioInput);
+              listItem.appendChild(label);
+              connectedPrinters.appendChild(listItem);
+            });
+
+            // Add a horizontal line separator after each group
+            const separator = document.createElement('hr');
+            connectedPrinters.appendChild(separator);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching printers:', error);
+          log('Failed to load printers.');
+        });
+    }
+
+    // Function to handle Print Hello World button click
+    document.getElementById('printHello').addEventListener('click', () => {
+      const selectedPrinterRadio = document.querySelector('input[name="selectedPrinter"]:checked');
+      if (!selectedPrinterRadio) {
+        log('Please select a printer to print.');
+        return;
+      }
+
+      const selectedPrinter = JSON.parse(selectedPrinterRadio.value);
+
+      fetch('/print', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ printer: selectedPrinter, message: 'Hello World' })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          log('Print job sent successfully.');
+        } else {
+          log(`Error: ${data.error}`);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        log('Failed to send print job.');
+      });
+    });
+
+    // Function to validate subnet format
+    function isValidSubnet(subnet) {
+      const subnetPattern = /^(\d{1,3}\.){3}$/;
+      return subnetPattern.test(subnet);
+    }
   </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 {
   "name": "ljh2-websocket-app",
   "version": "1.0.0",
@@ -9,6 +8,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "ws": "^8.11.0"
+    "ws": "^8.11.0",
+    "escpos": "^3.0.0" // Added escpos for printing functionality
   }
 }

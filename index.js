@@ -1,5 +1,8 @@
 const express = require('express');
 const { WebSocketServer } = require('ws');
+const escpos = require('escpos'); // Imported escpos library
+const Bluetooth = require('node-bluetooth'); // Added node-bluetooth for Bluetooth printer detection
+const ping = require('net-ping'); // Added net-ping for Ethernet printer scanning
 const app = express();
 
 app.use(express.json());
@@ -80,3 +83,176 @@ app.post('/notify', (req, res) => {
   }
   return res.status(404).json({ error: 'Client not found or not connected' });
 });
+
+// New: API endpoint to list connected printers with editable subnet
+app.get('/printers', async (req, res) => {
+  try {
+    const printers = [];
+    
+    // Retrieve subnet from query parameters or use default
+    const subnet = req.query.subnet || '192.168.1.';
+
+    // Validate subnet format
+    if (!isValidSubnet(subnet)) {
+      return res.status(400).json({ success: false, error: 'Invalid subnet format. Expected format: xxx.xxx.xxx.' });
+    }
+
+    // --- USB Printers ---
+    const usbDevices = escpos.USB.findPrinter();
+    usbDevices.forEach((device, index) => {
+      printers.push({
+        id: `usb-${index + 1}`,
+        type: 'USB',
+        deviceName: `${device.manufacturer} ${device.product}`,
+        vendorId: device.deviceId.vendorId,
+        productId: device.deviceId.productId
+      });
+    });
+
+    // --- Ethernet Printers ---
+    const ethernetPrinters = await findEthernetPrinters(subnet);
+    ethernetPrinters.forEach((printer, index) => {
+      printers.push({
+        id: `ethernet-${index + 1}`,
+        type: 'Ethernet',
+        deviceName: printer.address,
+        ipAddress: printer.address,
+        port: printer.port
+      });
+    });
+
+    // --- Bluetooth Printers ---
+    const bluetoothPrinters = await findBluetoothPrinters();
+    bluetoothPrinters.forEach((printer, index) => {
+      printers.push({
+        id: `bluetooth-${index + 1}`,
+        type: 'Bluetooth',
+        deviceName: printer.name,
+        address: printer.address
+      });
+    });
+
+    res.json({ success: true, printers });
+  } catch (error) {
+    console.error('Error fetching printers:', error);
+    res.status(500).json({ success: false, error: 'Failed to retrieve printers' });
+  }
+});
+
+// New: REST API endpoint to print a message on a selected printer
+app.post('/print', async (req, res) => {
+  const { printer, message } = req.body;
+
+  if (!printer || !message) {
+    return res.status(400).json({ success: false, error: 'Printer and message are required.' });
+  }
+
+  try {
+    // Initialize escpos device based on printer type
+    let device;
+    if (printer.type === 'USB') {
+      device = new escpos.USB(printer.vendorId, printer.productId);
+    } else if (printer.type === 'Ethernet') {
+      device = new escpos.Network(printer.ipAddress, printer.port);
+    } else if (printer.type === 'Bluetooth') {
+      // Note: escpos may have limited support for Bluetooth. Additional libraries might be required.
+      // For demonstration, assuming Bluetooth printers can be handled similarly to Network printers
+      device = new escpos.Network(printer.address, 9100); // Adjust port as necessary
+    } else {
+      return res.status(400).json({ success: false, error: 'Unsupported printer type.' });
+    }
+
+    const options = { encoding: "GB18030" /* default */ };
+    const printerEsc = new escpos.Printer(device, options);
+
+    device.open(function(error){
+      if (error) {
+        console.error('Error opening printer:', error);
+        return res.status(500).json({ success: false, error: 'Failed to open printer.' });
+      }
+
+      printerEsc
+        .text(message)
+        .cut()
+        .close();
+
+      console.log(`Printed message on printer: ${printer.deviceName}`);
+      return res.json({ success: true });
+    });
+  } catch (err) {
+    console.error('Error during printing:', err);
+    return res.status(500).json({ success: false, error: 'Printing failed.' });
+  }
+});
+
+// Function to find Ethernet Printers by scanning the provided subnet
+function findEthernetPrinters(subnet) {
+  return new Promise((resolve, reject) => {
+    const session = ping.createSession();
+    const printers = [];
+    let pending = 0;
+
+    for (let i = 1; i <= 254; i++) {
+      const target = subnet + i;
+      pending++;
+      session.pingHost(target, { timeout: 200 }, (error, target) => {
+        if (!error) {
+          // Check if port 9100 is open
+          const net = require('net');
+          const socket = new net.Socket();
+          socket.setTimeout(500);
+          socket.on('connect', () => {
+            printers.push({ address: target, port: 9100 });
+            socket.destroy();
+          }).on('timeout', () => {
+            socket.destroy();
+          }).on('error', () => {
+            socket.destroy();
+          }).on('close', () => {
+            pending--;
+            if (pending === 0) {
+              resolve(printers);
+            }
+          });
+          socket.connect(9100, target);
+        } else {
+          pending--;
+          if (pending === 0) {
+            resolve(printers);
+          }
+        }
+      });
+    }
+
+    // Handle case where no printers are found
+    setTimeout(() => {
+      if (pending > 0) {
+        resolve(printers);
+      }
+    }, 10000); // 10 seconds timeout
+  });
+}
+
+// Function to validate subnet format
+function isValidSubnet(subnet) {
+  const subnetPattern = /^(\d{1,3}\.){3}$/;
+  return subnetPattern.test(subnet);
+}
+
+// Function to find Bluetooth Printers
+function findBluetoothPrinters() {
+  return new Promise((resolve, reject) => {
+    const device = new Bluetooth.DeviceINQ();
+
+    const printers = [];
+
+    device.on('finished', () => {
+      resolve(printers);
+    }).on('found', (address, name) => {
+      // Assuming printers have specific service classes, adjust as needed
+      // For example, ESC/POS printers might have specific UUIDs
+      // Here we add all found Bluetooth devices as potential printers
+      printers.push({ name, address });
+    }).scan();
+  });
+}
