@@ -77,7 +77,7 @@ function Start-WebSocket-Runspace {
         $global:websocketRunspace = [runspacefactory]::CreateRunspace()
         $global:websocketRunspace.Open()
         $powershell = [powershell]::Create().AddScript({
-            param($wsUrl, $clientId, $LogFile, $cancellation, $notifyIcon)
+            param($wsUrl, $clientId, $LogFile, $cancellation, $notifyIcon, $soundFile)
             
             # Import required assemblies inside runspace
             Add-Type -AssemblyName System.Windows.Forms
@@ -108,6 +108,17 @@ function Start-WebSocket-Runspace {
                 }
             }
     
+            # Function to play sound notification
+            function Play-NotificationSound {
+                try {
+                    $SoundPlayer = New-Object System.Media.SoundPlayer
+                    $SoundPlayer.SoundLocation = $soundFile
+                    $SoundPlayer.PlaySync()
+                } catch {
+                    Log "Failed to play sound notification: $_"
+                }
+            }
+
             # Function to handle incoming messages
             function On-Message {
                 param ($sender, $e)
@@ -128,13 +139,7 @@ function Start-WebSocket-Runspace {
                         Show-SystemNotification -Title "Voiceful Order" -Message "$text"
 
                         # Play notification sound
-                        try {
-                            $SoundPlayer = New-Object System.Media.SoundPlayer
-                            $SoundPlayer.SoundLocation = $SoundFile
-                            $SoundPlayer.PlaySync()
-                        } catch {
-                            Log "Failed to play sound notification: $_"
-                        }
+                        Play-NotificationSound
                     }
                     else {
                         Log "Received message with missing fields."
@@ -143,21 +148,6 @@ function Start-WebSocket-Runspace {
                     Log "Received invalid JSON message: $_"
                 }
             }
-
-            # Function to play sound notification
-            function Play-NotificationSound {
-                try {
-                    $SoundPlayer = New-Object System.Media.SoundPlayer
-                    $SoundPlayer.SoundLocation = $SoundFile
-                    $SoundPlayer.PlaySync()
-                } catch {
-                    Log "Failed to play sound notification: $_"
-                }
-            }
-
-
-            # Play notification sound when message is received
-            Play-NotificationSound
     
             # Function to handle errors
             function On-Error {
@@ -235,7 +225,7 @@ function Start-WebSocket-Runspace {
             
             # Start WebSocket connection
             Start-WebSocket
-        }).AddArgument($wsUrl).AddArgument($clientId).AddArgument($LogFile).AddArgument($cancellation).AddArgument($notifyIcon)
+        }).AddArgument($wsUrl).AddArgument($clientId).AddArgument($LogFile).AddArgument($cancellation).AddArgument($notifyIcon).AddArgument($SoundFile)
         
         $powershell.Runspace = $runspace
         $powershell.BeginInvoke() | Out-Null
