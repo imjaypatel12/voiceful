@@ -3,7 +3,7 @@ $wsUrl = "wss://voiceful.azurewebsites.net:443"
 $clientId = "Test-Location"      
 
 # Path to the notification sound file
-$SoundFile = Join-Path -Path $PSScriptRoot -ChildPath "notification.wav"
+$SoundFile = Join-Path -Path $PSScriptRoot -ChildPath "sounds/single.wav"
 
 # Declare $cancellation globally to make it accessible in On-Open
 $cancellation = New-Object System.Threading.CancellationTokenSource
@@ -126,6 +126,15 @@ function Start-WebSocket-Runspace {
                         
                         # Show system notification
                         Show-SystemNotification -Title "Voiceful Order" -Message "$text"
+
+                        # Play notification sound
+                        try {
+                            $SoundPlayer = New-Object System.Media.SoundPlayer
+                            $SoundPlayer.SoundLocation = $SoundFile
+                            $SoundPlayer.PlaySync()
+                        } catch {
+                            Log "Failed to play sound notification: $_"
+                        }
                     }
                     else {
                         Log "Received message with missing fields."
@@ -134,6 +143,21 @@ function Start-WebSocket-Runspace {
                     Log "Received invalid JSON message: $_"
                 }
             }
+
+            # Function to play sound notification
+            function Play-NotificationSound {
+                try {
+                    $SoundPlayer = New-Object System.Media.SoundPlayer
+                    $SoundPlayer.SoundLocation = $SoundFile
+                    $SoundPlayer.PlaySync()
+                } catch {
+                    Log "Failed to play sound notification: $_"
+                }
+            }
+
+
+            # Play notification sound when message is received
+            Play-NotificationSound
     
             # Function to handle errors
             function On-Error {
