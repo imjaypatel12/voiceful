@@ -1,0 +1,192 @@
+Restaurant name: CITY PIZZA & KABOB HOUSE, Livermore.
+Address: 132 S VASCO RD LIVERMORE CA 94551.
+
+Menu:
+
+Lunch Special Facts (Monday - Friday 10 am - 2:30 pm):
+- 2 Slices with Fountain Drink costs $6.99
+- 2 Slices with Salad and Fountain Drink costs $10.99
+- 2 Slices with 6 Piece Wings and Fountain Drink costs $12.99
+- Any Sandwich with Salad and Fountain Drink costs $13.99
+- Any Gyro with Salad and Fountain Drink costs $14.99
+- Beef or Chicken Kabob with Salad and Fountain Drink costs $16.99
+
+Plain Cheese Pizza Facts:
+- King Slice of Plain Cheese Pizza costs $6.99 and $0.50 for each additional topping.
+- Small (12") Plain Cheese Pizza costs $14.99 and $1.00 for each additional topping.
+- Medium (14") Plain Cheese Pizza costs $17.99 and $1.50 for each additional topping.
+- Large (18") Plain Cheese Pizza costs $23.99 and $2.00 for each additional topping.
+- Party (20") Plain Cheese Pizza costs $27.99 and $2.50 for each additional topping.
+- King (24") Plain Cheese Pizza costs $35.99 and $3.00 for each additional topping.
+
+VEGETARIAN TOPPINGS Options: Tomato, Bell pepper, Red Onion, Green Onion, Black Olive, Pepperoncini, Green Olive, Sun Dried Tomatoes, Garlic, Spinach, Pineapple, Feta Cheese.
+Mushrooms, Ricotta Cheese, Fresh Cilantro, Fresh Basil, Jalapeno.
+
+NON-VEGETARIAN TOPPINGS Options: Pepperoni, Ham, Salami, Linguica, Chicken. Anchovies, Bacon, Sausage, Ground Beef.
+
+CHOISE OF SAUCE: Red Tomato, Creamy White, Pesto, BBQ.
+
+Specialty Pizza Facts:
+- King Slice of Garlic Chicken Pizza costs $9.99.
+- Small (12") Garlic Chicken Pizza costs $21.99.
+- Medium (14") Garlic Chicken Pizza costs $27.99.
+- Large (18") Garlic Chicken Pizza costs $35.99.
+- Party (20") Garlic Chicken Pizza costs $42.99.
+- King (24") Garlic Chicken Pizza costs $58.99.
+- Garlic Chicken Pizza contains White creamy Sauce, Red onion Mushroom, tomato, chicken, green onion, and garlic.
+
+- King Slice of Classic Margharita Pizza costs $9.99.
+- Small (12") Classic Margharita Pizza costs $21.99.
+- Medium (14") Classic Margharita Pizza costs $27.99.
+- Large (18") Classic Margharita Pizza costs $35.99.
+- Party (20") Classic Margharita Pizza costs $42.99.
+- King (24") Classic Margharita Pizza costs $58.99.
+- Classic Margharita Pizza contains contains Extra red Sauce, fresh basil, Sliced tomato and ricotta cheese.
+
+- King Slice of Vegetarian Pizza costs $9.99.
+- Small (12") Vegetarian Pizza costs $21.99.
+- Medium (14") Vegetarian Pizza costs $27.99.
+- Large (18") Vegetarian Pizza costs $35.99.
+- Party (20") Vegetarian Pizza costs $42.99.
+- King (24") Vegetarian Pizza costs $58.99.
+- Vegetarian Pizza contains Red Sauce, Mushroom, tomato, Red onion, bell pepper, black olive and garlic.
+
+- King Slice of Gourmet Veggie Pizza costs $9.99.
+- Small (12") Gourmet Veggie Pizza costs $21.99.
+- Medium (14") Gourmet Veggie Pizza costs $27.99.
+- Large (18") Gourmet Veggie Pizza costs $35.99.
+- Party (20") Gourmet Veggie Pizza costs $42.99.
+- King (24") Gourmet Veggie Pizza costs $58.99.
+- Gourmet Veggie Pizza contains White creamy Sauce, Spinach, Red onion, Mushroom, tomato zucchini, green onion, garlic and Artichoke hearts.
+
+- King Slice of Combination Pizza costs $9.99.
+- Small (12") Combination Pizza costs $21.99.
+- Medium (14") Combination Pizza costs $27.99.
+- Large (18") Combination Pizza costs $35.99.
+- Party (20") Combination Pizza costs $42.99.
+- King (24") Combination Pizza costs $58.99.
+- Combination Pizza contains Red sauce, Salami, Ham, Pepperoni, Mushroom, Bell pepper, Sausage and black olive.
+
+- King Slice of Pesto Pizza costs $9.99.
+- Small (12") Pesto Pizza costs $21.99.
+- Medium (14") Pesto Pizza costs $27.99.
+- Large (18") Pesto Pizza costs $35.99.
+- Party (20") Pesto Pizza costs $42.99.
+- King (24") Pesto Pizza costs $58.99.
+- King (24") Pesto Pizza contains Pesto Sauce, Green Onion, Black Olive, Tomato and Mushroom.
+
+- King Slice of Chicken Bacon Pizza costs $9.99.
+- Small (12") Chicken Bacon Pizza costs $21.99.
+- Medium (14") Chicken Bacon Pizza costs $27.99.
+- Large (18") Chicken Bacon Pizza costs $35.99.
+- Party (20") Chicken Bacon Pizza costs $42.99.
+- King (24") Chicken Bacon Pizza costs $58.99.
+- Chicken Bacon Pizza contains White Creamy Sauce, Bacon, Garlic, chicken tomato and green onions.
+
+- King Slice of Hawaiian Pizza costs $9.99.
+- Small (12") Hawaiian Pizza costs $21.99.
+- Medium (14") Hawaiian Pizza costs $27.99.
+- Large (18") Hawaiian Pizza costs $35.99.
+- Party (20") Hawaiian Pizza costs $42.99.
+- King (24") Hawaiian Pizza costs $58.99.
+- Hawaiian Pizza contains Red sauce, Extra cheese Extra Ham, Extra Pineapple.
+
+- King Slice of Meat Lovers Pizza costs $9.99.
+- Small (12") Meat Lovers Pizza costs $21.99.
+- Medium (14") Meat Lovers Pizza costs $27.99.
+- Large (18") Meat Lovers Pizza costs $35.99.
+- Party (20") Meat Lovers Pizza costs $42.99.
+- King (24") Meat Lovers Pizza costs $58.99.
+- Meat Lovers Pizza contains Red sauce, Salami, Ham, Pepperoni, Beef, Linguica and Sausage.
+
+- King Slice of BBQ Chicken Pizza costs $9.99.
+- Small (12") BBQ Chicken Pizza costs $21.99.
+- Medium (14") BBQ Chicken Pizza costs $27.99.
+- Large (18") BBQ Chicken Pizza costs $35.99.
+- Party (20") BBQ Chicken Pizza costs $42.99.
+- King (24") BBQ Chicken Pizza costs $58.99.
+- BBQ Chicken Pizza contains BBQ Sauce, Mushroom, Red Onion, Tomato, Garlic and chicken.
+
+- King Slice of Garlic Supreme Pizza costs $9.99.
+- Small (12") Garlic Supreme Pizza costs $21.99.
+- Medium (14") Garlic Supreme Pizza costs $27.99.
+- Large (18") Garlic Supreme Pizza costs $35.99.
+- Party (20") Garlic Supreme Pizza costs $42.99.
+- King (24") Garlic Supreme Pizza costs $58.99.
+- Garlic Supreme Pizza contains White Creamy Sauce, Pepperoni, Mushroom, Green onion, Tomato and Garlic.
+
+- King Slice of Greek Pizza costs $9.99.
+- Small (12") Greek Pizza costs $21.99.
+- Medium (14") Greek Pizza costs $27.99.
+- Large (18") Greek Pizza costs $35.99.
+- Party (20") Greek Pizza costs $42.99.
+- King (24") Greek Pizza costs $58.99.
+- Greek Pizza contains Pesto Sauce, Red Onion, Sun dried Tomato, Mushroom Pepperoncini, Green Olives and Fresh Feta Cheese.
+
+Afghani Style Pizza Facts:
+- Small Afghani Style Pizza costs $21.99.
+- Medium Afghani Style Pizza costs $27.99.
+- Large Afghani Style Pizza costs $35.99.
+- Party Afghani Style Pizza costs $42.99.
+- King Afghani Style Pizza costs $59.99.
+- Afghani Style Pizza contains all vegetables, jalapeno and fresh cilantro.
+
+Sandwich Facts:
+- Chicken Sandwich costs $10.99, this sandwich contains Lettuce, Mayonnaise, Tomato, and Swiss Cheese.
+- BBQ Chicken Sandwich costs $10.99, this sandwich contains Lettuce, BBQ Sauce, Tomato, and Swiss Cheese.
+- Ham Sandwich costs $10.99, this sandwich contains Lettuce, Mayonnaise, Tomato, and Swiss Cheese.
+
+Appetizer Facts:
+- BBQ Wings (8 pieces) costs $12.99.
+- Hot Wings (8 pieces) costs $12.99.
+- Garlic Twist (6 pieces) costs $7.99.
+- Garlic Bread with Cheese costs $5.99.
+- Garlic Sticks costs $5.99.
+- Mozzarella Sticks (8 pieces) costs $6.99.
+- Jalapeno Poppers (8 pieces) costs $6.99.
+- Leeke Potato Bolani costs $15.99.
+- Munto costs $14.99.
+
+Kabob Facts:
+- Chicken Kabob costs $16.99, this contains Special Marinated Chicken Breast.
+- Tekah Kabob costs $16.99, this contains Special Marinated Beef Tri Tip.
+- Lamb Kabob costs $19.99, this contains Special Marinated Lamb Chops.
+- Combo Kabob costs $17.99, this contains Chicken and Tekah.
+
+Gyro Facts:
+- Chicken Gyro costs $11.99, this contains Pita bread, lettuce, Tzatziki Sauce, Tomato, onion.
+- Beef Gyro costs $12.99, this contains Pita bread, lettuce, Tzatziki Sauce, Tomato, onion.
+- Lamb Gyro costs $14.99, this contains Pita bread, lettuce, Tzatziki Sauce, Tomato, onion.
+
+Calzone Facts:
+- Medium Calzone costs $14.99.
+- Large Calzone costs $17.99.
+
+Salad Facts:
+- Small Garden Salad costs $7.49.
+- Large Garden Salad costs $9.49.
+- Garden Salad contains Romaine lettuce, cucumber, tomato and crouton.
+
+- Small Greek Salad costs $8.49.
+- Large Greek Salad costs $11.49.
+- Greek Salad contains Romaine lettuce, green olives, sundried tomato, feta cheese, pepperoncini, crouton, artichoke hearts.
+
+- Small Caesar Salad costs $8.49.
+- Large Caesar Salad costs $11.49.
+- Caesar Salad contains Romaine lettuce, parmesan, caesar dressing and crouton.
+
+- Small Caesar Chicken Salad costs $9.49.
+- Large Caesar Chicken Salad costs $11.49.
+- Caesar Chicken Salad contains Romaine lettuce, parmesan, caesar dressing and crouton.
+
+Beverage Facts:
+- Can Soda costs $1.49.
+- 20 OZ Bottle costs $2.75.
+- 2 liter Bottle costs $4.00.
+- Small Fountain Gatorade costs $2.49.
+- Large Fountain Gatorade costs $3.49.
+
+Dessert Facts:
+- City Classic Cheese Cake costs $4.99.
+- City Classic Chocolate Cake costs $4.99.
+
