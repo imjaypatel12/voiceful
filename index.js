@@ -1,6 +1,5 @@
 const express = require('express');
 const { WebSocketServer } = require('ws');
-const { WebSocketServer } = require('ws');
 const { exec } = require('child_process'); // Added child_process for executing system commands
 const app = express();
 
@@ -81,4 +80,10 @@ app.post('/notify', (req, res) => {
     return res.json({ success: true });
   }
   return res.status(404).json({ error: 'Client not found or not connected' });
+});
+
+// Endpoint to fetch connected clients
+app.get('/clients', (req, res) => {
+  const clients = Object.keys(clientMap);
+  res.json({ clients });
 });

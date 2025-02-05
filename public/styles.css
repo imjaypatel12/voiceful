@@ -6,7 +6,7 @@ body {
     min-height: 100vh; /* Ensures the body takes full viewport height */
     /* Remove or adjust left padding to prevent layout issues */
     padding-left: 0; /* Removed left padding */
-    
+
     /* Optional: Add padding for better spacing on larger screens */
     padding: 20px;
 }
@@ -34,49 +34,40 @@ button {
     cursor: pointer;
 }
 
-/* Styles for Connected Printers List */
-#connectedPrinters {
-    max-width: 400px;
-    margin-top: 10px;
-}
-
-.collection-item {
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    margin-bottom: 5px;
-}
-
 /* Responsive Styles for Mobile Devices */
 @media (max-width: 600px) {
     body {
         padding: 10px; /* Reduce padding on smaller screens */
     }
-    
+
     h3 {
         font-size: 1.5em; /* Decrease font size for headings */
     }
-    
+
     div {
         max-width: 100%; /* Allow divs to take full width on mobile */
     }
-    
+
     input {
         padding: 8px; /* Reduce padding in input fields */
         margin-bottom: 8px;
     }
-    
+
     button {
         padding: 8px; /* Reduce padding in buttons */
     }
-    
+
     pre#logs {
         width: 100%;
         overflow-x: auto; /* Allow horizontal scrolling if necessary */
     }
+}
 
-    /* Ensure printers list takes full width on mobile */
-    #connectedPrinters {
-        max-width: 100%;
-    }
+#advancedTools {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto; /* Center the advanced tools section */
 }
